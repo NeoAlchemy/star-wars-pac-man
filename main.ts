@@ -2,6 +2,11 @@ namespace SpriteKind {
     export const SuperFood = SpriteKind.create()
     export const Corner = SpriteKind.create()
 }
+/**
+ * Fixes:
+ * 
+ * Time Since Start works for first play but not resetEnemies
+ */
 function enemyKilledMe (sprite: Sprite) {
     sprite.destroy(effects.fire, 100)
     music.powerDown.play()
@@ -159,6 +164,8 @@ function buildLevel (level: number) {
         tiles.setTilemap(tilemap`level0`)
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
+    } else if (level == 2) {
+        tiles.setTilemap(tilemap`level3`)
     } else {
         game.over(true, effects.starField)
     }
@@ -428,6 +435,9 @@ game.onUpdate(function () {
     superFoodSpriteList = tiles.getTilesByType(assets.tile`superPellet`)
     if (foodSpriteList.length == 0 && superFoodSpriteList.length == 0) {
         level += 1
+        resetFrightenedToNormal()
+        buildLevel(level)
+        resetEnemies()
     }
 })
 game.onUpdate(function () {
