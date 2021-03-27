@@ -157,6 +157,8 @@ function buildLevel (level: number) {
     scene.setBackgroundColor(15)
     if (level == 0) {
         tiles.setTilemap(tilemap`level0`)
+    } else if (level == 1) {
+        tiles.setTilemap(tilemap`level1`)
     } else {
         game.over(true, effects.starField)
     }
@@ -367,7 +369,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     	
     }
 })
-let foodSpriteList: Sprite[] = []
+let superFoodSpriteList: tiles.Location[] = []
+let foodSpriteList: tiles.Location[] = []
 let clydeStartTime = 0
 let blinkyStartTime = 0
 let inkyStartTime = 0
@@ -421,8 +424,9 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    foodSpriteList = sprites.allOfKind(SpriteKind.Food)
-    if (foodSpriteList.length == 0) {
+    foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
+    superFoodSpriteList = tiles.getTilesByType(assets.tile`superPellet`)
+    if (foodSpriteList.length == 0 && superFoodSpriteList.length == 0) {
         level += 1
     }
 })
