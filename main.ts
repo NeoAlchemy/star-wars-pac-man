@@ -157,6 +157,7 @@ function resetFrightenedToNormal () {
 }
 function setupGame () {
     info.setScore(0)
+    info.setLife(3)
 }
 function buildLevel (level: number) {
     scene.setBackgroundColor(15)
@@ -403,7 +404,6 @@ let ghostTime = 0
 let scaredGhostSpeed = 0
 let normalGhostSpeed = 0
 let pacmanSpeed = 0
-info.setLife(3)
 let level = 0
 pacmanSpeed = 100
 normalGhostSpeed = 75
@@ -416,6 +416,9 @@ let clydeWaitTime = 15000
 pointsForPellets = 10
 ghostPoints = 200
 superPelletPoints = 50
+scene.setBackgroundImage(assets.image`starWarsTitle`)
+pause(2000)
+scene.setBackgroundImage(assets.image`none`)
 buildLevel(level)
 setupPlayer()
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
