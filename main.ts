@@ -3,16 +3,30 @@ namespace SpriteKind {
     export const Corner = SpriteKind.create()
 }
 /**
- * Fixes:
+ * TODO:
  * 
- * Time Since Start works for first play but not resetEnemies
+ * Do Chase, Scatter, Frightened modes
+ * 
+ * Fix Fruit points to double
+ * 
+ * Do normal and frightened speeds and increases per level
+ * 
+ * Add 2 more levels
+ * 
+ * Do a fun intermission after 5.
  */
+// Fixes:
+// 
+// Time Since Start works for first play but not resetEnemies
 function enemyKilledMe (sprite: Sprite) {
     sprite.destroy(effects.fire, 100)
     music.powerDown.play()
     info.changeLifeBy(-1)
     setupPlayer()
     resetEnemies()
+}
+function doBehavior (mySprite: Sprite) {
+    doChase(mySprite)
 }
 function changeEnemiesNature (scared: boolean) {
     if (scared) {
@@ -38,103 +52,16 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`superPellet`, function (sprit
     Inky.setImage(assets.image`scaredGhost`)
     Blinky.setImage(assets.image`scaredGhost`)
     Clyde.setImage(assets.image`scaredGhost`)
-    doChase(Pinky)
-    doChase(Inky)
-    doChase(Blinky)
-    doChase(Clyde)
+    doFrightened(Pinky)
+    doFrightened(Inky)
+    doFrightened(Blinky)
+    doFrightened(Clyde)
 })
 function doChase (mySprite: Sprite) {
     mySprite.follow(pacman, ghostSpeed)
 }
 function doFrightened (mySprite: Sprite) {
-    topRightCorner = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Corner)
-    topLeftCorner = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Corner)
-    bottomRightCorner = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Corner)
-    bottomLeftCorner = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Corner)
-    topRightCorner.setPosition(0, 0)
-    topLeftCorner.setPosition(0, 0)
-    bottomRightCorner.setPosition(0, 0)
-    bottomLeftCorner.setPosition(0, 0)
-    if (mySprite == Pinky) {
-        mySprite.follow(topRightCorner, ghostSpeed)
-    }
-    if (mySprite == Inky) {
-        mySprite.follow(topLeftCorner, ghostSpeed)
-    }
-    if (mySprite == Blinky) {
-        mySprite.follow(bottomLeftCorner, ghostSpeed)
-    }
-    if (mySprite == Clyde) {
-        mySprite.follow(bottomRightCorner, ghostSpeed)
-    }
+    doScatter(mySprite)
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.setVelocity(0 - otherSprite.vx, 0 - otherSprite.vy)
@@ -149,10 +76,10 @@ function resetFrightenedToNormal () {
     Pinky.setImage(assets.image`pinky`)
     Inky.setImage(assets.image`inky`)
     Blinky.setImage(assets.image`blinky`)
-    doChase(Blinky)
-    doChase(Pinky)
-    doChase(Inky)
-    doChase(Clyde)
+    doBehavior(Blinky)
+    doBehavior(Pinky)
+    doBehavior(Inky)
+    doBehavior(Clyde)
     changeEnemiesNature(false)
 }
 function setupGame () {
@@ -282,13 +209,27 @@ function setupPlayer () {
 info.onLifeZero(function () {
     game.over(false, effects.dissolve)
 })
+function doScatter (mySprite: Sprite) {
+    if (mySprite == Pinky) {
+        mySprite.follow(topRightCorner, ghostSpeed)
+    }
+    if (mySprite == Inky) {
+        mySprite.follow(topLeftCorner, ghostSpeed)
+    }
+    if (mySprite == Blinky) {
+        mySprite.follow(bottomLeftCorner, ghostSpeed)
+    }
+    if (mySprite == Clyde) {
+        mySprite.follow(bottomRightCorner, ghostSpeed)
+    }
+}
 function resetEnemies () {
     ghostSpeed = normalGhostSpeed
     tiles.placeOnTile(Pinky, tiles.getTileLocation(7, 6))
     tiles.placeOnTile(Inky, tiles.getTileLocation(7, 7))
     tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
     tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
-    doChase(Pinky)
+    doBehavior(Pinky)
     inkyStartTime = game.runtime()
     blinkyStartTime = game.runtime()
     clydeStartTime = game.runtime()
@@ -298,7 +239,7 @@ function setupEnemies () {
     Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
     tiles.placeOnRandomTile(Pinky, assets.tile`pinky`)
     tiles.replaceAllTiles(assets.tile`pinky`, assets.tile`transparency16`)
-    doChase(Pinky)
+    doBehavior(Pinky)
     Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
     tiles.placeOnRandomTile(Inky, assets.tile`inky`)
     inkyStartTime = game.runtime()
@@ -317,7 +258,7 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
         Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
         tiles.placeOnTile(Pinky, tiles.getTileLocation(7, 6))
         pinkyScared = 0
-        doChase(Pinky)
+        doBehavior(Pinky)
     }
     if (sprite == Inky && inkyScared == 1) {
         Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
@@ -382,10 +323,6 @@ let foodSpriteList: tiles.Location[] = []
 let clydeStartTime = 0
 let blinkyStartTime = 0
 let inkyStartTime = 0
-let bottomLeftCorner: Sprite = null
-let bottomRightCorner: Sprite = null
-let topLeftCorner: Sprite = null
-let topRightCorner: Sprite = null
 let pacman: Sprite = null
 let Clyde: Sprite = null
 let Blinky: Sprite = null
@@ -397,6 +334,11 @@ let clydeScared = 0
 let blinkyScared = 0
 let inkyScared = 0
 let pinkyScared = 0
+let level = 0
+let bottomLeftCorner: Sprite = null
+let bottomRightCorner: Sprite = null
+let topLeftCorner: Sprite = null
+let topRightCorner: Sprite = null
 let superPelletPoints = 0
 let ghostPoints = 0
 let pointsForPellets = 0
@@ -404,7 +346,6 @@ let ghostTime = 0
 let scaredGhostSpeed = 0
 let normalGhostSpeed = 0
 let pacmanSpeed = 0
-let level = 0
 pacmanSpeed = 100
 normalGhostSpeed = 75
 scaredGhostSpeed = 25
@@ -416,8 +357,16 @@ let clydeWaitTime = 15000
 pointsForPellets = 10
 ghostPoints = 200
 superPelletPoints = 50
+topRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
+topLeftCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
+bottomRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
+bottomLeftCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
+topRightCorner.setPosition(16, 16)
+topLeftCorner.setPosition(16, 240)
+bottomRightCorner.setPosition(240, 16)
+bottomLeftCorner.setPosition(240, 240)
 scene.setBackgroundImage(assets.image`starWarsTitle`)
-pause(2000)
+pause(3000)
 scene.setBackgroundImage(assets.image`none`)
 buildLevel(level)
 setupPlayer()
@@ -445,13 +394,13 @@ game.onUpdate(function () {
 })
 game.onUpdate(function () {
     if (!(game.runtime() - inkyStartTime < inkyWaitTime)) {
-        doChase(Inky)
+        doBehavior(Inky)
     }
     if (!(game.runtime() - blinkyStartTime < blinkyWaitTime)) {
-        doChase(Blinky)
+        doBehavior(Blinky)
     }
     if (!(game.runtime() - clydeStartTime < clydeWaitTime)) {
-        doChase(Clyde)
+        doBehavior(Clyde)
     }
 })
 game.onUpdate(function () {
