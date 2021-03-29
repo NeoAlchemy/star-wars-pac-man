@@ -1,5 +1,6 @@
 {
     "name": "Star Wars PAC-MAN",
+    "version": "1.0.0",
     "description": "",
     "dependencies": {
         "device": "*",
