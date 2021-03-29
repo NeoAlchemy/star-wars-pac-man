@@ -418,7 +418,7 @@ ghostPoints = 200
 superPelletPoints = 50
 buildLevel(level)
 setupPlayer()
-game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many pellets as you can!!", DialogLayout.Bottom)
+game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
 setupEnemies()
 game.onUpdate(function () {
     if (pinkyScared == 1 || inkyScared == 1 || blinkyScared == 1 || clydeScared == 1) {
