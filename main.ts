@@ -9,11 +9,15 @@ namespace SpriteKind {
  * 
  * Fix Fruit points to double
  * 
- * Do normal and frightened speeds and increases per level
+ * Do increase pacman speed during frightened time
+ * 
+ * Do an easy mode
  * 
  * Add 2 more levels
  * 
  * Do a fun intermission after 5.
+ * 
+ * (MAX SPEED is 125)
  */
 // Fixes:
 // 
@@ -27,6 +31,17 @@ function enemyKilledMe (sprite: Sprite) {
 }
 function doBehavior (mySprite: Sprite) {
     doChase(mySprite)
+    if (experiment == 1) {
+        console.logValue("doChase", game.runtime())
+        timer.after(3000, function () {
+            doScatter(mySprite)
+            console.logValue("doScatter", game.runtime())
+        })
+        timer.after(7000, function () {
+            doChase(mySprite)
+            console.logValue("doChase", game.runtime())
+        })
+    }
 }
 function changeEnemiesNature (scared: boolean) {
     if (scared) {
@@ -92,7 +107,13 @@ function buildLevel (level: number) {
         tiles.setTilemap(tilemap`level0`)
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
+        pacmanSpeed = 110
+        normalGhostSpeed = 105
+        scaredGhostSpeed = 70
     } else if (level == 2) {
+        pacmanSpeed = 125
+        normalGhostSpeed = 120
+        scaredGhostSpeed = 75
         tiles.setTilemap(tilemap`level3`)
     } else {
         game.over(true, effects.starField)
@@ -230,9 +251,15 @@ function resetEnemies () {
     tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
     tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
     doBehavior(Pinky)
-    inkyStartTime = game.runtime()
-    blinkyStartTime = game.runtime()
-    clydeStartTime = game.runtime()
+    timer.after(inkyWaitTime, function () {
+        doBehavior(Inky)
+    })
+    timer.after(blinkyWaitTime, function () {
+        doBehavior(Blinky)
+    })
+    timer.after(clydeWaitTime, function () {
+        doBehavior(Clyde)
+    })
 }
 function setupEnemies () {
     ghostSpeed = normalGhostSpeed
@@ -242,15 +269,21 @@ function setupEnemies () {
     doBehavior(Pinky)
     Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
     tiles.placeOnRandomTile(Inky, assets.tile`inky`)
-    inkyStartTime = game.runtime()
+    timer.after(inkyWaitTime, function () {
+        doBehavior(Inky)
+    })
     tiles.replaceAllTiles(assets.tile`inky`, assets.tile`transparency16`)
     Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
     tiles.placeOnRandomTile(Blinky, assets.tile`myTile10`)
-    blinkyStartTime = game.runtime()
+    timer.after(blinkyWaitTime, function () {
+        doBehavior(Blinky)
+    })
     tiles.replaceAllTiles(assets.tile`myTile10`, assets.tile`transparency16`)
     Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
     tiles.placeOnRandomTile(Clyde, assets.tile`clyde`)
-    clydeStartTime = game.runtime()
+    timer.after(clydeWaitTime, function () {
+        doBehavior(Clyde)
+    })
     tiles.replaceAllTiles(assets.tile`clyde`, assets.tile`transparency16`)
 }
 sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
@@ -264,19 +297,25 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
         Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
         tiles.placeOnTile(Inky, tiles.getTileLocation(7, 7))
         inkyScared = 0
-        inkyStartTime = game.runtime()
+        timer.after(inkyWaitTime, function () {
+            doBehavior(Inky)
+        })
     }
     if (sprite == Blinky && blinkyScared == 1) {
         Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
         tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
         blinkyScared = 0
-        blinkyStartTime = game.runtime()
+        timer.after(blinkyWaitTime, function () {
+            doBehavior(Blinky)
+        })
     }
     if (sprite == Clyde && clydeScared == 1) {
         Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
         tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
         clydeScared = 0
-        clydeStartTime = game.runtime()
+        timer.after(clydeWaitTime, function () {
+            doBehavior(Clyde)
+        })
     }
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`pellet`, function (sprite, location) {
@@ -320,9 +359,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let superFoodSpriteList: tiles.Location[] = []
 let foodSpriteList: tiles.Location[] = []
-let clydeStartTime = 0
-let blinkyStartTime = 0
-let inkyStartTime = 0
 let pacman: Sprite = null
 let Clyde: Sprite = null
 let Blinky: Sprite = null
@@ -342,18 +378,23 @@ let topRightCorner: Sprite = null
 let superPelletPoints = 0
 let ghostPoints = 0
 let pointsForPellets = 0
+let clydeWaitTime = 0
+let blinkyWaitTime = 0
+let inkyWaitTime = 0
 let ghostTime = 0
 let scaredGhostSpeed = 0
 let normalGhostSpeed = 0
 let pacmanSpeed = 0
+let experiment = 0
+experiment = 0
 pacmanSpeed = 100
-normalGhostSpeed = 75
-scaredGhostSpeed = 25
+normalGhostSpeed = 90
+scaredGhostSpeed = 60
 let ghostBlinkingTime = 2000
 ghostTime = 7000
-let inkyWaitTime = 5000
-let blinkyWaitTime = 10000
-let clydeWaitTime = 15000
+inkyWaitTime = 5000
+blinkyWaitTime = 10000
+clydeWaitTime = 15000
 pointsForPellets = 10
 ghostPoints = 200
 superPelletPoints = 50
@@ -383,15 +424,7 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    if (!(game.runtime() - inkyStartTime < inkyWaitTime)) {
-        doBehavior(Inky)
-    }
-    if (!(game.runtime() - blinkyStartTime < blinkyWaitTime)) {
-        doBehavior(Blinky)
-    }
-    if (!(game.runtime() - clydeStartTime < clydeWaitTime)) {
-        doBehavior(Clyde)
-    }
+	
 })
 game.onUpdate(function () {
     if (pacman.vx > 0) {
