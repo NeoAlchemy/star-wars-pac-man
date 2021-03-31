@@ -9,15 +9,9 @@ namespace SpriteKind {
  * 
  * Fix Ghost points to double
  * 
- * Do increase pacman speed during frightened time
- * 
- * Do an easy mode
- * 
  * Add 2 more levels
  * 
  * Do a fun intermission after 5.
- * 
- * (MAX SPEED is 125)
  */
 // Fixes:
 // 
@@ -145,19 +139,37 @@ function buildLevel (level: number) {
     scene.setBackgroundColor(15)
     if (level == 0) {
         tiles.setTilemap(tilemap`level0`)
-        pacmanSpeed = 100
-        normalGhostSpeed = 90
-        scaredGhostSpeed = 60
+        pacmanSpeedNormal = 100
+        pacmanSpeedDuringScared = 110
+        if (easyMode == 0) {
+            normalGhostSpeed = 90
+            scaredGhostSpeed = 60
+        } else {
+            normalGhostSpeed = 60
+            scaredGhostSpeed = 50
+        }
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
-        pacmanSpeed = 110
-        normalGhostSpeed = 105
-        scaredGhostSpeed = 70
+        pacmanSpeedNormal = 220
+        pacmanSpeedDuringScared = 120
+        if (easyMode == 0) {
+            normalGhostSpeed = 90
+            scaredGhostSpeed = 60
+        } else {
+            normalGhostSpeed = 70
+            scaredGhostSpeed = 50
+        }
     } else if (level == 2) {
-        pacmanSpeed = 125
-        normalGhostSpeed = 120
-        scaredGhostSpeed = 75
         tiles.setTilemap(tilemap`level3`)
+        pacmanSpeedNormal = 125
+        pacmanSpeedDuringScared = 125
+        if (easyMode == 0) {
+            normalGhostSpeed = 110
+            scaredGhostSpeed = 70
+        } else {
+            normalGhostSpeed = 90
+            scaredGhostSpeed = 60
+        }
     } else {
         game.over(true, effects.starField)
     }
@@ -465,10 +477,12 @@ let normalGhostSpeed = 0
 let pacmanSpeedDuringScared = 0
 let pacmanSpeedNormal = 0
 let pacmanSpeed = 0
+let easyMode = 0
 let changeGhostImagesExperiement = 0
 let movementExperiment = 0
 movementExperiment = 0
 changeGhostImagesExperiement = 0
+easyMode = 0
 pacmanSpeed = 100
 pacmanSpeedNormal = 100
 pacmanSpeedDuringScared = 110
@@ -495,6 +509,12 @@ pause(3000)
 scene.setBackgroundImage(assets.image`none`)
 buildLevel(level)
 setupPlayer()
+if (game.ask("Easy Mode")) {
+    easyMode = 1
+}
+if (game.ask("Villains, Not Ships")) {
+    changeGhostImagesExperiement = 1
+}
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
 setupEnemies()
 game.onUpdate(function () {
