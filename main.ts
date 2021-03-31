@@ -7,7 +7,7 @@ namespace SpriteKind {
  * 
  * Do Chase, Scatter, Frightened modes
  * 
- * Fix Fruit points to double
+ * Fix Ghost points to double
  * 
  * Do increase pacman speed during frightened time
  * 
@@ -31,7 +31,7 @@ function enemyKilledMe (sprite: Sprite) {
 }
 function doBehavior (mySprite: Sprite) {
     doChase(mySprite)
-    if (experiment == 1) {
+    if (movementExperiment == 1) {
         console.logValue("doChase", game.runtime())
         timer.after(3000, function () {
             doScatter(mySprite)
@@ -40,6 +40,10 @@ function doBehavior (mySprite: Sprite) {
         timer.after(7000, function () {
             doChase(mySprite)
             console.logValue("doChase", game.runtime())
+        })
+        timer.after(3000, function () {
+            doScatter(mySprite)
+            console.logValue("doScatter", game.runtime())
         })
     }
 }
@@ -61,12 +65,30 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`superPellet`, function (sprit
     music.powerUp.play()
     info.changeScoreBy(superPelletPoints)
     ghostSpeed = scaredGhostSpeed
+    pacmanSpeed = pacmanSpeedDuringScared
+    controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
     changeEnemiesNature(true)
     timeTillNormal = game.runtime() + ghostTime
-    Pinky.setImage(assets.image`scaredGhost`)
-    Inky.setImage(assets.image`scaredGhost`)
-    Blinky.setImage(assets.image`scaredGhost`)
-    Clyde.setImage(assets.image`scaredGhost`)
+    if (changeGhostImagesExperiement == 0) {
+        Pinky.setImage(assets.image`scaredGhost`)
+    } else {
+        Pinky.setImage(assets.image`scaredRoyalGuard`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Inky.setImage(assets.image`scaredGhost`)
+    } else {
+        Inky.setImage(assets.image`scaredDarthVadar`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Blinky.setImage(assets.image`scaredGhost`)
+    } else {
+        Blinky.setImage(assets.image`scaredBobaFett`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Clyde.setImage(assets.image`scaredGhost`)
+    } else {
+        Clyde.setImage(assets.image`scaredStormTrooper`)
+    }
     doFrightened(Pinky)
     doFrightened(Inky)
     doFrightened(Blinky)
@@ -87,15 +109,33 @@ function resetFrightenedToNormal () {
     animation.stopAnimation(animation.AnimationTypes.All, Inky)
     animation.stopAnimation(animation.AnimationTypes.All, Blinky)
     animation.stopAnimation(animation.AnimationTypes.All, Clyde)
-    Clyde.setImage(assets.image`clyde`)
-    Pinky.setImage(assets.image`pinky`)
-    Inky.setImage(assets.image`inky`)
-    Blinky.setImage(assets.image`blinky`)
+    if (changeGhostImagesExperiement == 0) {
+        Pinky.setImage(assets.image`pinky`)
+    } else {
+        Pinky.setImage(assets.image`royalGuards`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Inky.setImage(assets.image`inky`)
+    } else {
+        Inky.setImage(assets.image`darthVadar`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Blinky.setImage(assets.image`blinky`)
+    } else {
+        Blinky.setImage(assets.image`bobaFett`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Clyde.setImage(assets.image`clyde`)
+    } else {
+        Clyde.setImage(assets.image`stormTrooper`)
+    }
     doBehavior(Blinky)
     doBehavior(Pinky)
     doBehavior(Inky)
     doBehavior(Clyde)
     changeEnemiesNature(false)
+    pacmanSpeed = pacmanSpeedNormal
+    controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
 }
 function setupGame () {
     info.setScore(0)
@@ -105,6 +145,9 @@ function buildLevel (level: number) {
     scene.setBackgroundColor(15)
     if (level == 0) {
         tiles.setTilemap(tilemap`level0`)
+        pacmanSpeed = 100
+        normalGhostSpeed = 90
+        scaredGhostSpeed = 60
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
         pacmanSpeed = 110
@@ -121,110 +164,113 @@ function buildLevel (level: number) {
 }
 function animateScared () {
     if (pinkyScared == 1) {
-        animation.runImageAnimation(
-        Pinky,
-        assets.animation`flashingGhost`,
-        200,
-        true
-        )
+        if (changeGhostImagesExperiement == 0) {
+            animation.runImageAnimation(
+            Pinky,
+            assets.animation`flashingGhost`,
+            200,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            Pinky,
+            assets.animation`royalGuardScared`,
+            200,
+            true
+            )
+        }
     }
     if (inkyScared == 1) {
-        animation.runImageAnimation(
-        Inky,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . 8 . . . . . . . . . . . . 8 . 
-            . 8 . . . . 8 8 8 8 . . . . 8 . 
-            . 8 . . . 3 3 8 8 3 3 . . . 8 . 
-            8 8 . 8 8 3 1 8 8 3 1 8 8 . 8 8 
-            8 8 8 8 8 1 1 8 8 1 1 8 8 8 8 8 
-            8 8 . 8 8 8 8 8 8 8 8 8 8 . 8 8 
-            . 8 . . . 8 8 8 8 8 8 . . . 8 . 
-            . 8 . . . . 8 8 8 8 . . . . 8 . 
-            . 8 . . . . . . . . . . . . 8 . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . 1 . . . . . . . . . . . . 1 . 
-            . 1 . . . . 1 1 1 1 . . . . 1 . 
-            . 1 . . . 2 2 1 1 2 2 . . . 1 . 
-            1 1 . 1 1 2 d 1 1 2 d 1 1 . 1 1 
-            1 1 1 1 1 d d 1 1 d d 1 1 1 1 1 
-            1 1 . 1 1 1 1 1 1 1 1 1 1 . 1 1 
-            . 1 . . . 1 1 1 1 1 1 . . . 1 . 
-            . 1 . . . . 1 1 1 1 . . . . 1 . 
-            . 1 . . . . . . . . . . . . 1 . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        200,
-        true
-        )
+        if (changeGhostImagesExperiement == 0) {
+            animation.runImageAnimation(
+            Inky,
+            assets.animation`flashingGhost`,
+            200,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            Inky,
+            assets.animation`darthVadarScared`,
+            200,
+            true
+            )
+        }
     }
     if (blinkyScared == 1) {
-        animation.runImageAnimation(
-        Blinky,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . 8 . . . . . . . . . . . . 8 . 
-            . 8 . . . . 8 8 8 8 . . . . 8 . 
-            . 8 . . . 3 3 8 8 3 3 . . . 8 . 
-            8 8 . 8 8 3 1 8 8 3 1 8 8 . 8 8 
-            8 8 8 8 8 1 1 8 8 1 1 8 8 8 8 8 
-            8 8 . 8 8 8 8 8 8 8 8 8 8 . 8 8 
-            . 8 . . . 8 8 8 8 8 8 . . . 8 . 
-            . 8 . . . . 8 8 8 8 . . . . 8 . 
-            . 8 . . . . . . . . . . . . 8 . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . 8 . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . 1 . . . . . . . . . . . . 1 . 
-            . 1 . . . . 1 1 1 1 . . . . 1 . 
-            . 1 . . . 2 2 1 1 2 2 . . . 1 . 
-            1 1 . 1 1 2 d 1 1 2 d 1 1 . 1 1 
-            1 1 1 1 1 d d 1 1 d d 1 1 1 1 1 
-            1 1 . 1 1 1 1 1 1 1 1 1 1 . 1 1 
-            . 1 . . . 1 1 1 1 1 1 . . . 1 . 
-            . 1 . . . . 1 1 1 1 . . . . 1 . 
-            . 1 . . . . . . . . . . . . 1 . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . 1 . . . . . . . . . . 1 . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        200,
-        true
-        )
+        if (changeGhostImagesExperiement == 0) {
+            animation.runImageAnimation(
+            Blinky,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . 8 . . . . . . . . . . 8 . . 
+                . . 8 . . . . . . . . . . 8 . . 
+                . 8 . . . . . . . . . . . . 8 . 
+                . 8 . . . . 8 8 8 8 . . . . 8 . 
+                . 8 . . . 3 3 8 8 3 3 . . . 8 . 
+                8 8 . 8 8 3 1 8 8 3 1 8 8 . 8 8 
+                8 8 8 8 8 1 1 8 8 1 1 8 8 8 8 8 
+                8 8 . 8 8 8 8 8 8 8 8 8 8 . 8 8 
+                . 8 . . . 8 8 8 8 8 8 . . . 8 . 
+                . 8 . . . . 8 8 8 8 . . . . 8 . 
+                . 8 . . . . . . . . . . . . 8 . 
+                . . 8 . . . . . . . . . . 8 . . 
+                . . 8 . . . . . . . . . . 8 . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `,img`
+                . . . . . . . . . . . . . . . . 
+                . . 1 . . . . . . . . . . 1 . . 
+                . . 1 . . . . . . . . . . 1 . . 
+                . 1 . . . . . . . . . . . . 1 . 
+                . 1 . . . . 1 1 1 1 . . . . 1 . 
+                . 1 . . . 2 2 1 1 2 2 . . . 1 . 
+                1 1 . 1 1 2 d 1 1 2 d 1 1 . 1 1 
+                1 1 1 1 1 d d 1 1 d d 1 1 1 1 1 
+                1 1 . 1 1 1 1 1 1 1 1 1 1 . 1 1 
+                . 1 . . . 1 1 1 1 1 1 . . . 1 . 
+                . 1 . . . . 1 1 1 1 . . . . 1 . 
+                . 1 . . . . . . . . . . . . 1 . 
+                . . 1 . . . . . . . . . . 1 . . 
+                . . 1 . . . . . . . . . . 1 . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            200,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            Blinky,
+            assets.animation`bobaFettScared`,
+            200,
+            true
+            )
+        }
     }
     if (clydeScared == 1) {
-        animation.runImageAnimation(
-        Clyde,
-        assets.animation`flashingGhost`,
-        200,
-        true
-        )
+        if (changeGhostImagesExperiement == 0) {
+            animation.runImageAnimation(
+            Clyde,
+            assets.animation`flashingGhost`,
+            200,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            Clyde,
+            assets.animation`stormtrooperScared`,
+            200,
+            true
+            )
+        }
     }
 }
 function setupPlayer () {
     pacman = sprites.create(assets.image`upFacingFalcon`, SpriteKind.Player)
     tiles.placeOnRandomTile(pacman, assets.tile`pellet`)
     scene.cameraFollowSprite(pacman)
+    pacmanSpeed = pacmanSpeedNormal
     controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
 }
 info.onLifeZero(function () {
@@ -263,23 +309,39 @@ function resetEnemies () {
 }
 function setupEnemies () {
     ghostSpeed = normalGhostSpeed
-    Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
+    if (changeGhostImagesExperiement == 0) {
+        Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
+    } else {
+        Pinky = sprites.create(assets.image`royalGuards`, SpriteKind.Enemy)
+    }
     tiles.placeOnRandomTile(Pinky, assets.tile`pinky`)
     tiles.replaceAllTiles(assets.tile`pinky`, assets.tile`transparency16`)
     doBehavior(Pinky)
-    Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
+    if (changeGhostImagesExperiement == 0) {
+        Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
+    } else {
+        Inky = sprites.create(assets.image`darthVadar`, SpriteKind.Enemy)
+    }
     tiles.placeOnRandomTile(Inky, assets.tile`inky`)
     timer.after(inkyWaitTime, function () {
         doBehavior(Inky)
     })
     tiles.replaceAllTiles(assets.tile`inky`, assets.tile`transparency16`)
-    Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
+    if (changeGhostImagesExperiement == 0) {
+        Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
+    } else {
+        Blinky = sprites.create(assets.image`bobaFett`, SpriteKind.Enemy)
+    }
     tiles.placeOnRandomTile(Blinky, assets.tile`myTile10`)
     timer.after(blinkyWaitTime, function () {
         doBehavior(Blinky)
     })
     tiles.replaceAllTiles(assets.tile`myTile10`, assets.tile`transparency16`)
-    Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
+    if (changeGhostImagesExperiement == 0) {
+        Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
+    } else {
+        Clyde = sprites.create(assets.image`stormTrooper`, SpriteKind.Enemy)
+    }
     tiles.placeOnRandomTile(Clyde, assets.tile`clyde`)
     timer.after(clydeWaitTime, function () {
         doBehavior(Clyde)
@@ -288,13 +350,21 @@ function setupEnemies () {
 }
 sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
     if (sprite == Pinky && pinkyScared == 1) {
-        Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
+        if (changeGhostImagesExperiement == 0) {
+            Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
+        } else {
+            Pinky = sprites.create(assets.image`royalGuards`, SpriteKind.Enemy)
+        }
         tiles.placeOnTile(Pinky, tiles.getTileLocation(7, 6))
         pinkyScared = 0
         doBehavior(Pinky)
     }
     if (sprite == Inky && inkyScared == 1) {
-        Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
+        if (changeGhostImagesExperiement == 0) {
+            Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
+        } else {
+            Inky = sprites.create(assets.image`darthVadar`, SpriteKind.Enemy)
+        }
         tiles.placeOnTile(Inky, tiles.getTileLocation(7, 7))
         inkyScared = 0
         timer.after(inkyWaitTime, function () {
@@ -302,7 +372,11 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
         })
     }
     if (sprite == Blinky && blinkyScared == 1) {
-        Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
+        if (changeGhostImagesExperiement == 0) {
+            Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
+        } else {
+            Blinky = sprites.create(assets.image`bobaFett`, SpriteKind.Enemy)
+        }
         tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
         blinkyScared = 0
         timer.after(blinkyWaitTime, function () {
@@ -310,7 +384,11 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
         })
     }
     if (sprite == Clyde && clydeScared == 1) {
-        Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
+        if (changeGhostImagesExperiement == 0) {
+            Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
+        } else {
+            Clyde = sprites.create(assets.image`stormTrooper`, SpriteKind.Enemy)
+        }
         tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
         clydeScared = 0
         timer.after(clydeWaitTime, function () {
@@ -359,12 +437,12 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let superFoodSpriteList: tiles.Location[] = []
 let foodSpriteList: tiles.Location[] = []
-let pacman: Sprite = null
 let Clyde: Sprite = null
 let Blinky: Sprite = null
 let Inky: Sprite = null
 let Pinky: Sprite = null
 let timeTillNormal = 0
+let pacman: Sprite = null
 let ghostSpeed = 0
 let clydeScared = 0
 let blinkyScared = 0
@@ -384,10 +462,16 @@ let inkyWaitTime = 0
 let ghostTime = 0
 let scaredGhostSpeed = 0
 let normalGhostSpeed = 0
+let pacmanSpeedDuringScared = 0
+let pacmanSpeedNormal = 0
 let pacmanSpeed = 0
-let experiment = 0
-experiment = 0
+let changeGhostImagesExperiement = 0
+let movementExperiment = 0
+movementExperiment = 0
+changeGhostImagesExperiement = 0
 pacmanSpeed = 100
+pacmanSpeedNormal = 100
+pacmanSpeedDuringScared = 110
 normalGhostSpeed = 90
 scaredGhostSpeed = 60
 let ghostBlinkingTime = 2000
@@ -422,9 +506,6 @@ game.onUpdate(function () {
         buildLevel(level)
         resetEnemies()
     }
-})
-game.onUpdate(function () {
-	
 })
 game.onUpdate(function () {
     if (pacman.vx > 0) {
