@@ -54,6 +54,46 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "starWarsTitle"
     },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwLyIiIg8AAC8iIiIi8gDwIi8iIiIPAPAi/yIi8gAALxIfISIiDwAvIv8iIiLyAC8i/yIiIg8A8CL/IiLyAADwIi8iIiIPAAAvIiIiIvIAAPAvIiIiDwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "royalGuards"
+    },
+    "image5": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADw/////w8AAB/x/7v7/wDw8f+//x8PAPD/H/H/+wAAH//xH/8RDwD///Efv///AP//H/EbEQ8A8P/xH7//AADw//Ef/xEPAAD/H/H/+/8AAPD/v/8fDwAAAPD/u/sAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "darthVadar"
+    },
+    "image4": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwX2ZhZg8AAF8vdnd39wDwdy9yd3cPAPB3HyIi8gAAf3f/////DwB/d///////AH93/////w8A8GYfIhLyAADwVi9yd3cPAABfL3Z3d/cAAPAvZmZmDwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bobaFett"
+    },
+    "image6": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwvxERvw8AAB8fERHx+wDwEf8f8REPAPAR/x8f8QAAHxEf8RERDwAfER//Ef//AB8RH/EREQ8A8BH/Hx/xAADwEf8f8REPAAAfHxER8fsAAPC/ERG/DwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "stormTrooper"
+    },
+    "image7": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwj4iIiA8AAI+IiIiI+ADwiI+IiIgPAPCI/4iI+AAAjxgfgYiIDwCPiP+IiIj4AI+I/4iIiA8A8Ij/iIj4AADwiI+IiIgPAACPiIiIiPgAAPCPiIiIDwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "scaredRoyalGuard"
+    },
+    "image9": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwX4iIiA8AAF8viIiI+ADwiC+IiIgPAPCILyIi8gAAj4j/////DwCPiP//////AI+I/////w8A8IgvIiLyAADwWC+IiIgPAABfL4iIiPgAAPAviIiIDwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "scaredBobaFett"
+    },
+    "image10": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwj4iIjw8AAI+PiIj4+ADwiP+P+IgPAPCI/4+P+AAAj4iP+IiIDwCPiI//iP//AI+Ij/iIiA8A8Ij/j4/4AADwiP+P+IgPAACPj4iI+PgAAPCPiIiPDwAAAPD///8AAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "scaredStormTrooper"
+    },
+    "image8": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADwj4iIiA8AAB+BiLuL+ADwgYi4iBgPAPCIGIGI+wAAH4iBGIgRDwCPiIEYuIj4AI+IGIEbEQ8A8IiBGLj4AADwiIEYiBEPAACPGIGIi/gAAPCPuIgYDwAAAPD/u/sAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "scaredDarthVadar"
+    },
     "anim5": {
         "namespace": "myAnimations",
         "id": "anim5",
