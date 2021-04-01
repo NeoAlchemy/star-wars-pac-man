@@ -160,7 +160,7 @@ function buildLevel (level: number) {
             scaredGhostSpeed = 50
         }
     } else if (level == 2) {
-        tiles.setTilemap(tilemap`level3`)
+        tiles.setTilemap(tilemap`level4`)
         pacmanSpeedNormal = 125
         pacmanSpeedDuringScared = 125
         if (easyMode == 0) {
@@ -170,6 +170,8 @@ function buildLevel (level: number) {
             normalGhostSpeed = 90
             scaredGhostSpeed = 60
         }
+    } else if (level == 3) {
+        tiles.setTilemap(tilemap`level3`)
     } else {
         game.over(true, effects.starField)
     }
