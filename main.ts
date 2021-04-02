@@ -7,8 +7,6 @@ namespace SpriteKind {
  * 
  * Do Chase, Scatter, Frightened modes
  * 
- * Fix Ghost points to double
- * 
  * Do a fun intermission after 5.
  */
 // Fixes:
