@@ -9,8 +9,6 @@ namespace SpriteKind {
  * 
  * Fix Ghost points to double
  * 
- * Add 2 more levels
- * 
  * Do a fun intermission after 5.
  */
 // Fixes:
@@ -99,6 +97,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSpr
 })
 function resetFrightenedToNormal () {
     ghostSpeed = normalGhostSpeed
+    ghostKilledCount = 0
     animation.stopAnimation(animation.AnimationTypes.All, Pinky)
     animation.stopAnimation(animation.AnimationTypes.All, Inky)
     animation.stopAnimation(animation.AnimationTypes.All, Blinky)
@@ -145,8 +144,8 @@ function buildLevel (level: number) {
             normalGhostSpeed = 90
             scaredGhostSpeed = 60
         } else {
-            normalGhostSpeed = 60
-            scaredGhostSpeed = 50
+            normalGhostSpeed = 50
+            scaredGhostSpeed = 40
         }
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
@@ -156,7 +155,7 @@ function buildLevel (level: number) {
             normalGhostSpeed = 90
             scaredGhostSpeed = 60
         } else {
-            normalGhostSpeed = 70
+            normalGhostSpeed = 60
             scaredGhostSpeed = 50
         }
     } else if (level == 2) {
@@ -167,11 +166,13 @@ function buildLevel (level: number) {
             normalGhostSpeed = 110
             scaredGhostSpeed = 70
         } else {
-            normalGhostSpeed = 90
+            normalGhostSpeed = 70
             scaredGhostSpeed = 60
         }
     } else if (level == 3) {
         tiles.setTilemap(tilemap`level3`)
+    } else if (level == 4) {
+        tiles.setTilemap(tilemap`level5`)
     } else {
         game.over(true, effects.starField)
     }
@@ -416,11 +417,11 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`pellet`, function (sprite, lo
     music.pewPew.play()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    ghostKilledCount += 1
     if (otherSprite == Pinky && pinkyScared == 0) {
         enemyKilledMe(sprite)
     } else if (otherSprite == Pinky) {
         otherSprite.destroy(effects.fire, 100)
-        info.changeScoreBy(ghostPoints)
     } else {
     	
     }
@@ -428,7 +429,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         enemyKilledMe(sprite)
     } else if (otherSprite == Inky) {
         otherSprite.destroy(effects.fire, 100)
-        info.changeScoreBy(ghostPoints)
     } else {
     	
     }
@@ -436,7 +436,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         enemyKilledMe(sprite)
     } else if (otherSprite == Blinky) {
         otherSprite.destroy(effects.fire, 100)
-        info.changeScoreBy(ghostPoints)
     } else {
     	
     }
@@ -444,9 +443,17 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         enemyKilledMe(sprite)
     } else if (otherSprite == Clyde) {
         otherSprite.destroy(effects.fire, 100)
-        info.changeScoreBy(ghostPoints)
     } else {
     	
+    }
+    if (ghostKilledCount == 1) {
+        info.changeScoreBy(200)
+    } else if (ghostKilledCount == 2) {
+        info.changeScoreBy(400)
+    } else if (ghostKilledCount == 3) {
+        info.changeScoreBy(800)
+    } else {
+        info.changeScoreBy(1600)
     }
 })
 let superFoodSpriteList: tiles.Location[] = []
@@ -467,8 +474,8 @@ let bottomLeftCorner: Sprite = null
 let bottomRightCorner: Sprite = null
 let topLeftCorner: Sprite = null
 let topRightCorner: Sprite = null
+let ghostKilledCount = 0
 let superPelletPoints = 0
-let ghostPoints = 0
 let pointsForPellets = 0
 let clydeWaitTime = 0
 let blinkyWaitTime = 0
@@ -496,8 +503,8 @@ inkyWaitTime = 5000
 blinkyWaitTime = 10000
 clydeWaitTime = 15000
 pointsForPellets = 10
-ghostPoints = 200
 superPelletPoints = 50
+ghostKilledCount = 0
 topRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
 topLeftCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
 bottomRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
