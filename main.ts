@@ -1,20 +1,59 @@
 namespace SpriteKind {
     export const SuperFood = SpriteKind.create()
     export const Corner = SpriteKind.create()
+    export const ClydeCorner = SpriteKind.create()
+    export const PinkyCorner = SpriteKind.create()
+    export const BlinkyCorner = SpriteKind.create()
+    export const InkyCorner = SpriteKind.create()
 }
 /**
  * TODO:
  * 
  * Do Chase, Scatter, Frightened modes
  * 
+ * with scatter
+ * 
+ *     when hit corner then make another corner on other side to follow
+ * 
  * Do a fun intermission after 5.
  */
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.ClydeCorner, function (sprite, otherSprite) {
+    if (sprite == Clyde) {
+        if (otherSprite == clydePath1) {
+            sprite.follow(clydePath2, ghostSpeed)
+        } else if (otherSprite == clydePath2) {
+            sprite.follow(clydePath3, ghostSpeed)
+        } else if (otherSprite == clydePath3) {
+            sprite.follow(clydePath4, ghostSpeed)
+        } else if (otherSprite == clydePath4) {
+            sprite.follow(clydePath1, ghostSpeed)
+        } else {
+            sprite.follow(clydePath1, ghostSpeed)
+        }
+    }
+})
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.BlinkyCorner, function (sprite, otherSprite) {
+    if (sprite == Blinky) {
+        if (otherSprite == blinkyPath1) {
+            sprite.follow(blinkyPath2, ghostSpeed)
+        } else if (otherSprite == blinkyPath2) {
+            sprite.follow(blinkyPath3, ghostSpeed)
+        } else if (otherSprite == blinkyPath3) {
+            sprite.follow(blinkyPath4, ghostSpeed)
+        } else if (otherSprite == blinkyPath4) {
+            sprite.follow(blinkyPath1, ghostSpeed)
+        } else {
+            sprite.follow(blinkyPath1, ghostSpeed)
+        }
+    }
+})
 // Fixes:
 // 
 // Time Since Start works for first play but not resetEnemies
 function enemyKilledMe (sprite: Sprite) {
     sprite.destroy(effects.fire, 100)
     music.powerDown.play()
+    pause(1000)
     info.changeLifeBy(-1)
     setupPlayer()
     resetEnemies()
@@ -22,18 +61,14 @@ function enemyKilledMe (sprite: Sprite) {
 function doBehavior (mySprite: Sprite) {
     doChase(mySprite)
     if (movementExperiment == 1) {
-        console.logValue("doChase", game.runtime())
         timer.after(3000, function () {
             doScatter(mySprite)
-            console.logValue("doScatter", game.runtime())
         })
         timer.after(7000, function () {
             doChase(mySprite)
-            console.logValue("doChase", game.runtime())
         })
         timer.after(3000, function () {
             doScatter(mySprite)
-            console.logValue("doScatter", game.runtime())
         })
     }
 }
@@ -83,6 +118,21 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`superPellet`, function (sprit
     doFrightened(Inky)
     doFrightened(Blinky)
     doFrightened(Clyde)
+})
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.InkyCorner, function (sprite, otherSprite) {
+    if (sprite == Inky) {
+        if (otherSprite == inkyPath1) {
+            sprite.follow(inkyPath2, ghostSpeed)
+        } else if (otherSprite == inkyPath2) {
+            sprite.follow(inkyPath3, ghostSpeed)
+        } else if (otherSprite == inkyPath3) {
+            sprite.follow(inkyPath4, ghostSpeed)
+        } else if (otherSprite == inkyPath4) {
+            sprite.follow(inkyPath1, ghostSpeed)
+        } else {
+            sprite.follow(inkyPath1, ghostSpeed)
+        }
+    }
 })
 function doChase (mySprite: Sprite) {
     mySprite.follow(pacman, ghostSpeed)
@@ -136,45 +186,60 @@ function buildLevel (level: number) {
     scene.setBackgroundColor(15)
     if (level == 0) {
         tiles.setTilemap(tilemap`level0`)
-        pacmanSpeedNormal = 100
-        pacmanSpeedDuringScared = 110
+        pacmanSpeedNormal = 80
+        pacmanSpeedDuringScared = 90
         if (easyMode == 0) {
-            normalGhostSpeed = 90
-            scaredGhostSpeed = 60
+            normalGhostSpeed = 75
+            scaredGhostSpeed = 50
+        } else {
+            normalGhostSpeed = 40
+            scaredGhostSpeed = 30
+        }
+    } else if (level == 1) {
+        tiles.setTilemap(tilemap`level1`)
+        pacmanSpeedNormal = 90
+        pacmanSpeedDuringScared = 95
+        if (easyMode == 0) {
+            normalGhostSpeed = 85
+            scaredGhostSpeed = 55
         } else {
             normalGhostSpeed = 50
             scaredGhostSpeed = 40
         }
-    } else if (level == 1) {
-        tiles.setTilemap(tilemap`level1`)
-        pacmanSpeedNormal = 220
-        pacmanSpeedDuringScared = 120
+    } else if (level == 2) {
+        tiles.setTilemap(tilemap`level4`)
+    } else if (level == 3) {
+        tiles.setTilemap(tilemap`level3`)
+    } else if (level == 4) {
+        pacmanSpeedNormal = 100
+        pacmanSpeedDuringScared = 100
         if (easyMode == 0) {
-            normalGhostSpeed = 90
+            normalGhostSpeed = 95
             scaredGhostSpeed = 60
         } else {
             normalGhostSpeed = 60
             scaredGhostSpeed = 50
         }
-    } else if (level == 2) {
-        tiles.setTilemap(tilemap`level4`)
-        pacmanSpeedNormal = 125
-        pacmanSpeedDuringScared = 125
-        if (easyMode == 0) {
-            normalGhostSpeed = 110
-            scaredGhostSpeed = 70
-        } else {
-            normalGhostSpeed = 70
-            scaredGhostSpeed = 60
-        }
-    } else if (level == 3) {
-        tiles.setTilemap(tilemap`level3`)
-    } else if (level == 4) {
         tiles.setTilemap(tilemap`level5`)
     } else {
         game.over(true, effects.starField)
     }
 }
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.PinkyCorner, function (sprite, otherSprite) {
+    if (sprite == Pinky) {
+        if (otherSprite == pinkyPath1) {
+            sprite.follow(pinkyPath2, ghostSpeed)
+        } else if (otherSprite == pinkyPath2) {
+            sprite.follow(pinkyPath3, ghostSpeed)
+        } else if (otherSprite == pinkyPath3) {
+            sprite.follow(pinkyPath4, ghostSpeed)
+        } else if (otherSprite == pinkyPath4) {
+            sprite.follow(pinkyPath1, ghostSpeed)
+        } else {
+            sprite.follow(pinkyPath1, ghostSpeed)
+        }
+    }
+})
 function animateScared () {
     if (pinkyScared == 1) {
         if (changeGhostImagesExperiement == 0) {
@@ -281,7 +346,7 @@ function animateScared () {
 }
 function setupPlayer () {
     pacman = sprites.create(assets.image`upFacingFalcon`, SpriteKind.Player)
-    tiles.placeOnRandomTile(pacman, assets.tile`pellet`)
+    tiles.placeOnTile(pacman, tiles.getTileLocation(8, 10))
     scene.cameraFollowSprite(pacman)
     pacmanSpeed = pacmanSpeedNormal
     controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
@@ -291,16 +356,16 @@ info.onLifeZero(function () {
 })
 function doScatter (mySprite: Sprite) {
     if (mySprite == Pinky) {
-        mySprite.follow(topRightCorner, ghostSpeed)
+        mySprite.follow(pinkyPath2, ghostSpeed)
     }
     if (mySprite == Inky) {
-        mySprite.follow(topLeftCorner, ghostSpeed)
-    }
-    if (mySprite == Blinky) {
-        mySprite.follow(bottomLeftCorner, ghostSpeed)
+        mySprite.follow(inkyPath4, ghostSpeed)
     }
     if (mySprite == Clyde) {
-        mySprite.follow(bottomRightCorner, ghostSpeed)
+        mySprite.follow(clydePath1, ghostSpeed)
+    }
+    if (mySprite == Blinky) {
+        mySprite.follow(blinkyPath4, ghostSpeed)
     }
 }
 function resetEnemies () {
@@ -456,22 +521,35 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let superFoodSpriteList: tiles.Location[] = []
 let foodSpriteList: tiles.Location[] = []
-let Clyde: Sprite = null
-let Blinky: Sprite = null
 let Inky: Sprite = null
 let Pinky: Sprite = null
 let timeTillNormal = 0
 let pacman: Sprite = null
-let ghostSpeed = 0
+let pacmanSpeed = 0
 let clydeScared = 0
 let blinkyScared = 0
 let inkyScared = 0
 let pinkyScared = 0
+let Blinky: Sprite = null
+let ghostSpeed = 0
+let Clyde: Sprite = null
 let level = 0
-let bottomLeftCorner: Sprite = null
-let bottomRightCorner: Sprite = null
-let topLeftCorner: Sprite = null
-let topRightCorner: Sprite = null
+let inkyPath4: Sprite = null
+let inkyPath3: Sprite = null
+let inkyPath2: Sprite = null
+let inkyPath1: Sprite = null
+let blinkyPath4: Sprite = null
+let blinkyPath3: Sprite = null
+let blinkyPath2: Sprite = null
+let blinkyPath1: Sprite = null
+let pinkyPath4: Sprite = null
+let pinkyPath3: Sprite = null
+let pinkyPath2: Sprite = null
+let pinkyPath1: Sprite = null
+let clydePath4: Sprite = null
+let clydePath3: Sprite = null
+let clydePath2: Sprite = null
+let clydePath1: Sprite = null
 let ghostKilledCount = 0
 let superPelletPoints = 0
 let pointsForPellets = 0
@@ -483,18 +561,16 @@ let scaredGhostSpeed = 0
 let normalGhostSpeed = 0
 let pacmanSpeedDuringScared = 0
 let pacmanSpeedNormal = 0
-let pacmanSpeed = 0
 let easyMode = 0
 let changeGhostImagesExperiement = 0
 let movementExperiment = 0
-movementExperiment = 0
+movementExperiment = 1
 changeGhostImagesExperiement = 0
 easyMode = 0
-pacmanSpeed = 100
 pacmanSpeedNormal = 100
 pacmanSpeedDuringScared = 110
-normalGhostSpeed = 90
-scaredGhostSpeed = 60
+normalGhostSpeed = 50
+scaredGhostSpeed = 40
 let ghostBlinkingTime = 2000
 ghostTime = 7000
 inkyWaitTime = 5000
@@ -503,19 +579,41 @@ clydeWaitTime = 15000
 pointsForPellets = 10
 superPelletPoints = 50
 ghostKilledCount = 0
-topRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
-topLeftCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
-bottomRightCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
-bottomLeftCorner = sprites.create(assets.image`none`, SpriteKind.Corner)
-topRightCorner.setPosition(16, 16)
-topLeftCorner.setPosition(16, 240)
-bottomRightCorner.setPosition(240, 16)
-bottomLeftCorner.setPosition(240, 240)
+clydePath1 = sprites.create(assets.image`none`, SpriteKind.ClydeCorner)
+clydePath2 = sprites.create(assets.image`none`, SpriteKind.ClydeCorner)
+clydePath3 = sprites.create(assets.image`none`, SpriteKind.ClydeCorner)
+clydePath4 = sprites.create(assets.image`none`, SpriteKind.ClydeCorner)
+pinkyPath1 = sprites.create(assets.image`none`, SpriteKind.PinkyCorner)
+pinkyPath2 = sprites.create(assets.image`none`, SpriteKind.PinkyCorner)
+pinkyPath3 = sprites.create(assets.image`none`, SpriteKind.PinkyCorner)
+pinkyPath4 = sprites.create(assets.image`none`, SpriteKind.PinkyCorner)
+blinkyPath1 = sprites.create(assets.image`none`, SpriteKind.BlinkyCorner)
+blinkyPath2 = sprites.create(assets.image`none`, SpriteKind.BlinkyCorner)
+blinkyPath3 = sprites.create(assets.image`none`, SpriteKind.BlinkyCorner)
+blinkyPath4 = sprites.create(assets.image`none`, SpriteKind.BlinkyCorner)
+inkyPath1 = sprites.create(assets.image`none`, SpriteKind.InkyCorner)
+inkyPath2 = sprites.create(assets.image`none`, SpriteKind.InkyCorner)
+inkyPath3 = sprites.create(assets.image`none`, SpriteKind.InkyCorner)
+inkyPath4 = sprites.create(assets.image`none`, SpriteKind.InkyCorner)
+inkyPath1.setPosition(176, 232)
+inkyPath2.setPosition(196, 196)
+inkyPath3.setPosition(232, 164)
+inkyPath4.setPosition(232, 232)
+clydePath1.setPosition(24, 158)
+clydePath2.setPosition(64, 196)
+clydePath3.setPosition(72, 232)
+clydePath4.setPosition(24, 232)
+pinkyPath1.setPosition(24, 72)
+pinkyPath2.setPosition(54, 72)
+pinkyPath3.setPosition(72, 16)
+pinkyPath4.setPosition(16, 16)
+blinkyPath1.setPosition(184, 24)
+blinkyPath2.setPosition(240, 16)
+blinkyPath3.setPosition(232, 84)
+blinkyPath4.setPosition(184, 54)
 scene.setBackgroundImage(assets.image`starWarsTitle`)
 pause(3000)
 scene.setBackgroundImage(assets.image`none`)
-buildLevel(level)
-setupPlayer()
 if (game.ask("Easy Mode")) {
     easyMode = 1
 }
@@ -523,6 +621,8 @@ if (game.ask("Villains, Not Ships")) {
     changeGhostImagesExperiement = 1
 }
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
+buildLevel(level)
+setupPlayer()
 setupEnemies()
 game.onUpdate(function () {
     foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
