@@ -214,41 +214,7 @@ function animateScared () {
         if (changeGhostImagesExperiement == 0) {
             animation.runImageAnimation(
             Blinky,
-            [img`
-                . . . . . . . . . . . . . . . . 
-                . . 8 . . . . . . . . . . 8 . . 
-                . . 8 . . . . . . . . . . 8 . . 
-                . 8 . . . . . . . . . . . . 8 . 
-                . 8 . . . . 8 8 8 8 . . . . 8 . 
-                . 8 . . . 3 3 8 8 3 3 . . . 8 . 
-                8 8 . 8 8 3 1 8 8 3 1 8 8 . 8 8 
-                8 8 8 8 8 1 1 8 8 1 1 8 8 8 8 8 
-                8 8 . 8 8 8 8 8 8 8 8 8 8 . 8 8 
-                . 8 . . . 8 8 8 8 8 8 . . . 8 . 
-                . 8 . . . . 8 8 8 8 . . . . 8 . 
-                . 8 . . . . . . . . . . . . 8 . 
-                . . 8 . . . . . . . . . . 8 . . 
-                . . 8 . . . . . . . . . . 8 . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `,img`
-                . . . . . . . . . . . . . . . . 
-                . . 1 . . . . . . . . . . 1 . . 
-                . . 1 . . . . . . . . . . 1 . . 
-                . 1 . . . . . . . . . . . . 1 . 
-                . 1 . . . . 1 1 1 1 . . . . 1 . 
-                . 1 . . . 2 2 1 1 2 2 . . . 1 . 
-                1 1 . 1 1 2 d 1 1 2 d 1 1 . 1 1 
-                1 1 1 1 1 d d 1 1 d d 1 1 1 1 1 
-                1 1 . 1 1 1 1 1 1 1 1 1 1 . 1 1 
-                . 1 . . . 1 1 1 1 1 1 . . . 1 . 
-                . 1 . . . . 1 1 1 1 . . . . 1 . 
-                . 1 . . . . . . . . . . . . 1 . 
-                . . 1 . . . . . . . . . . 1 . . 
-                . . 1 . . . . . . . . . . 1 . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `],
+            assets.animation`flashingGhost`,
             200,
             true
             )
@@ -514,15 +480,15 @@ bottomLeftCorner.setPosition(240, 240)
 scene.setBackgroundImage(assets.image`starWarsTitle`)
 pause(3000)
 scene.setBackgroundImage(assets.image`none`)
-buildLevel(level)
-setupPlayer()
 if (game.ask("Easy Mode")) {
     easyMode = 1
 }
 if (game.ask("Villains, Not Ships")) {
     changeGhostImagesExperiement = 1
 }
+buildLevel(level)
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
+setupPlayer()
 setupEnemies()
 game.onUpdate(function () {
     foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
