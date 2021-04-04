@@ -16,6 +16,7 @@ function enemyKilledMe (sprite: Sprite) {
     sprite.destroy(effects.fire, 100)
     music.powerDown.play()
     info.changeLifeBy(-1)
+    pause(2000)
     setupPlayer()
     resetEnemies()
 }
@@ -247,7 +248,7 @@ function animateScared () {
 }
 function setupPlayer () {
     pacman = sprites.create(assets.image`upFacingFalcon`, SpriteKind.Player)
-    tiles.placeOnRandomTile(pacman, assets.tile`pellet`)
+    tiles.placeOnTile(pacman, tiles.getTileLocation(8, 10))
     scene.cameraFollowSprite(pacman)
     pacmanSpeed = pacmanSpeedNormal
     controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
