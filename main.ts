@@ -148,7 +148,7 @@ function buildLevel (level: number) {
         }
     } else if (level == 1) {
         tiles.setTilemap(tilemap`level1`)
-        pacmanSpeedNormal = 220
+        pacmanSpeedNormal = 120
         pacmanSpeedDuringScared = 120
         if (easyMode == 0) {
             normalGhostSpeed = 90
