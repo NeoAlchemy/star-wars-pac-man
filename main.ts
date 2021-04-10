@@ -492,16 +492,6 @@ game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you ca
 setupPlayer()
 setupEnemies()
 game.onUpdate(function () {
-    foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
-    superFoodSpriteList = tiles.getTilesByType(assets.tile`superPellet`)
-    if (foodSpriteList.length == 0 && superFoodSpriteList.length == 0) {
-        level += 1
-        resetFrightenedToNormal()
-        buildLevel(level)
-        resetEnemies()
-    }
-})
-game.onUpdate(function () {
     if (pacman.vx > 0) {
         pacman.setImage(assets.image`rightFacingFalcon`)
     } else if (pacman.vx < 0) {
@@ -522,5 +512,15 @@ game.onUpdate(function () {
         if (game.runtime() > timeTillNormal) {
             resetFrightenedToNormal()
         }
+    }
+})
+game.onUpdateInterval(500, function () {
+    foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
+    superFoodSpriteList = tiles.getTilesByType(assets.tile`superPellet`)
+    if (foodSpriteList.length == 0 && superFoodSpriteList.length == 0) {
+        level += 1
+        buildLevel(level)
+        resetFrightenedToNormal()
+        resetEnemies()
     }
 })
