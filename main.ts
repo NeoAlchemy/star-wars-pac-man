@@ -94,6 +94,9 @@ function doFrightened (mySprite: Sprite) {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.setVelocity(0 - otherSprite.vx, 0 - otherSprite.vy)
 })
+function animatePixels () {
+    light.showAnimation(light.sparkleAnimation, 500)
+}
 function resetFrightenedToNormal () {
     ghostSpeed = normalGhostSpeed
     ghostKilledCount = 0
@@ -136,6 +139,7 @@ function setupGame () {
 function buildLevel (level: number) {
     scene.setBackgroundColor(15)
     if (level == 0) {
+        light.setPixelColor(0, 0xffff00)
         tiles.setTilemap(tilemap`level0`)
         pacmanSpeedNormal = 100
         pacmanSpeedDuringScared = 110
@@ -147,6 +151,7 @@ function buildLevel (level: number) {
             scaredGhostSpeed = 40
         }
     } else if (level == 1) {
+        light.setPixelColor(1, 0xffff00)
         tiles.setTilemap(tilemap`level1`)
         pacmanSpeedNormal = 120
         pacmanSpeedDuringScared = 120
@@ -158,6 +163,7 @@ function buildLevel (level: number) {
             scaredGhostSpeed = 50
         }
     } else if (level == 2) {
+        light.setPixelColor(2, 0xffff00)
         tiles.setTilemap(tilemap`level4`)
         pacmanSpeedNormal = 125
         pacmanSpeedDuringScared = 125
@@ -169,10 +175,13 @@ function buildLevel (level: number) {
             scaredGhostSpeed = 60
         }
     } else if (level == 3) {
+        light.setPixelColor(3, 0xffff00)
         tiles.setTilemap(tilemap`level3`)
     } else if (level == 4) {
+        light.setPixelColor(4, 0xffff00)
         tiles.setTilemap(tilemap`level5`)
     } else {
+        light.showAnimation(light.rainbowAnimation, 500)
         game.over(true, effects.starField)
     }
 }
@@ -455,7 +464,7 @@ let easyMode = 0
 let changeGhostImagesExperiement = 0
 let movementExperiment = 0
 movementExperiment = 0
-changeGhostImagesExperiement = 0
+changeGhostImagesExperiement = 1
 easyMode = 0
 pacmanSpeed = 100
 pacmanSpeedNormal = 100
@@ -479,13 +488,14 @@ topLeftCorner.setPosition(16, 240)
 bottomRightCorner.setPosition(240, 16)
 bottomLeftCorner.setPosition(240, 240)
 scene.setBackgroundImage(assets.image`starWarsTitle`)
-pause(3000)
+animatePixels()
+pause(1000)
 scene.setBackgroundImage(assets.image`none`)
 if (game.ask("Easy Mode")) {
     easyMode = 1
 }
-if (game.ask("Villains, Not Ships")) {
-    changeGhostImagesExperiement = 1
+if (game.ask("Ships, not Villans")) {
+    changeGhostImagesExperiement = 0
 }
 buildLevel(level)
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
