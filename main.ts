@@ -51,48 +51,59 @@ function changeEnemiesNature (scared: boolean) {
         clydeScared = 0
     }
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`superPellet`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`transparency16`)
-    music.powerUp.play()
-    info.changeScoreBy(superPelletPoints)
-    ghostSpeed = scaredGhostSpeed
-    pacmanSpeed = pacmanSpeedDuringScared
-    controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
-    changeEnemiesNature(true)
-    timeTillNormal = game.runtime() + ghostTime
-    if (changeGhostImagesExperiement == 0) {
-        Pinky.setImage(assets.image`scaredGhost`)
-    } else {
-        Pinky.setImage(assets.image`scaredRoyalGuard`)
-    }
-    if (changeGhostImagesExperiement == 0) {
-        Inky.setImage(assets.image`scaredGhost`)
-    } else {
-        Inky.setImage(assets.image`scaredDarthVadar`)
-    }
-    if (changeGhostImagesExperiement == 0) {
-        Blinky.setImage(assets.image`scaredGhost`)
-    } else {
-        Blinky.setImage(assets.image`scaredBobaFett`)
-    }
-    if (changeGhostImagesExperiement == 0) {
-        Clyde.setImage(assets.image`scaredGhost`)
-    } else {
-        Clyde.setImage(assets.image`scaredStormTrooper`)
-    }
-    doFrightened(Pinky)
-    doFrightened(Inky)
-    doFrightened(Blinky)
-    doFrightened(Clyde)
-})
-function doChase (mySprite: Sprite) {
-    mySprite.follow(pacman, ghostSpeed)
+function doChase (mySprite2: Sprite) {
+    mySprite2.follow(pacman, ghostSpeed)
 }
-function doFrightened (mySprite: Sprite) {
-    doScatter(mySprite)
+function doFrightened (mySprite3: Sprite) {
+    doScatter(mySprite3)
 }
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.setVelocity(0 - otherSprite.vx, 0 - otherSprite.vy)
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite4) {
+    if (sprite4 == Pinky && pinkyScared == 1) {
+        if (changeGhostImagesExperiement == 0) {
+            Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
+        } else {
+            Pinky = sprites.create(assets.image`royalGuards`, SpriteKind.Enemy)
+        }
+        tiles.placeOnTile(Pinky, tiles.getTileLocation(7, 6))
+        pinkyScared = 0
+        doBehavior(Pinky)
+    }
+    if (sprite4 == Inky && inkyScared == 1) {
+        if (changeGhostImagesExperiement == 0) {
+            Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
+        } else {
+            Inky = sprites.create(assets.image`darthVadar`, SpriteKind.Enemy)
+        }
+        tiles.placeOnTile(Inky, tiles.getTileLocation(7, 7))
+        inkyScared = 0
+        timer.after(inkyWaitTime, function () {
+            doBehavior(Inky)
+        })
+    }
+    if (sprite4 == Blinky && blinkyScared == 1) {
+        if (changeGhostImagesExperiement == 0) {
+            Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
+        } else {
+            Blinky = sprites.create(assets.image`bobaFett`, SpriteKind.Enemy)
+        }
+        tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
+        blinkyScared = 0
+        timer.after(blinkyWaitTime, function () {
+            doBehavior(Blinky)
+        })
+    }
+    if (sprite4 == Clyde && clydeScared == 1) {
+        if (changeGhostImagesExperiement == 0) {
+            Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
+        } else {
+            Clyde = sprites.create(assets.image`stormTrooper`, SpriteKind.Enemy)
+        }
+        tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
+        clydeScared = 0
+        timer.after(clydeWaitTime, function () {
+            doBehavior(Clyde)
+        })
+    }
 })
 function animatePixels () {
     light.showAnimation(light.sparkleAnimation, 500)
@@ -255,8 +266,86 @@ function animateScared () {
         }
     }
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`superPellet`, function (sprite2, location) {
+    tiles.setTileAt(location, assets.tile`transparency16`)
+    music.powerUp.play()
+    info.changeScoreBy(superPelletPoints)
+    ghostSpeed = scaredGhostSpeed
+    pacmanSpeed = pacmanSpeedDuringScared
+    controller.moveSprite(pacman, pacmanSpeed, pacmanSpeed)
+    changeEnemiesNature(true)
+    timeTillNormal = game.runtime() + ghostTime
+    if (changeGhostImagesExperiement == 0) {
+        Pinky.setImage(assets.image`scaredGhost`)
+    } else {
+        Pinky.setImage(assets.image`scaredRoyalGuard`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Inky.setImage(assets.image`scaredGhost`)
+    } else {
+        Inky.setImage(assets.image`scaredDarthVadar`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Blinky.setImage(assets.image`scaredGhost`)
+    } else {
+        Blinky.setImage(assets.image`scaredBobaFett`)
+    }
+    if (changeGhostImagesExperiement == 0) {
+        Clyde.setImage(assets.image`scaredGhost`)
+    } else {
+        Clyde.setImage(assets.image`scaredStormTrooper`)
+    }
+    doFrightened(Pinky)
+    doFrightened(Inky)
+    doFrightened(Blinky)
+    doFrightened(Clyde)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite6, otherSprite2) {
+    ghostKilledCount += 1
+    if (otherSprite2 == Pinky && pinkyScared == 0) {
+        enemyKilledMe(sprite6)
+    } else if (otherSprite2 == Pinky) {
+        otherSprite2.destroy(effects.fire, 100)
+    } else {
+    	
+    }
+    if (otherSprite2 == Inky && inkyScared == 0) {
+        enemyKilledMe(sprite6)
+    } else if (otherSprite2 == Inky) {
+        otherSprite2.destroy(effects.fire, 100)
+    } else {
+    	
+    }
+    if (otherSprite2 == Blinky && blinkyScared == 0) {
+        enemyKilledMe(sprite6)
+    } else if (otherSprite2 == Blinky) {
+        otherSprite2.destroy(effects.fire, 100)
+    } else {
+    	
+    }
+    if (otherSprite2 == Clyde && clydeScared == 0) {
+        enemyKilledMe(sprite6)
+    } else if (otherSprite2 == Clyde) {
+        otherSprite2.destroy(effects.fire, 100)
+    } else {
+    	
+    }
+    if (ghostKilledCount == 1) {
+        info.changeScoreBy(200)
+    } else if (ghostKilledCount == 2) {
+        info.changeScoreBy(400)
+    } else if (ghostKilledCount == 3) {
+        info.changeScoreBy(800)
+    } else {
+        info.changeScoreBy(1600)
+    }
+})
 function setupPlayer () {
-    pacman = sprites.create(assets.image`upFacingFalcon`, SpriteKind.Player)
+    if (changeGhostImagesExperiement == 0) {
+        pacman = sprites.create(assets.image`upFacingFalcon`, SpriteKind.Player)
+    } else {
+        pacman = sprites.create(assets.image`rightFacingSkywalker`, SpriteKind.Player)
+    }
     tiles.placeOnTile(pacman, tiles.getTileLocation(8, 10))
     scene.cameraFollowSprite(pacman)
     pacmanSpeed = pacmanSpeedNormal
@@ -265,18 +354,18 @@ function setupPlayer () {
 info.onLifeZero(function () {
     game.over(false, effects.dissolve)
 })
-function doScatter (mySprite: Sprite) {
-    if (mySprite == Pinky) {
-        mySprite.follow(topRightCorner, ghostSpeed)
+function doScatter (mySprite4: Sprite) {
+    if (mySprite4 == Pinky) {
+        mySprite4.follow(topRightCorner, ghostSpeed)
     }
-    if (mySprite == Inky) {
-        mySprite.follow(topLeftCorner, ghostSpeed)
+    if (mySprite4 == Inky) {
+        mySprite4.follow(topLeftCorner, ghostSpeed)
     }
-    if (mySprite == Blinky) {
-        mySprite.follow(bottomLeftCorner, ghostSpeed)
+    if (mySprite4 == Blinky) {
+        mySprite4.follow(bottomLeftCorner, ghostSpeed)
     }
-    if (mySprite == Clyde) {
-        mySprite.follow(bottomRightCorner, ghostSpeed)
+    if (mySprite4 == Clyde) {
+        mySprite4.follow(bottomRightCorner, ghostSpeed)
     }
 }
 function resetEnemies () {
@@ -337,113 +426,28 @@ function setupEnemies () {
     })
     tiles.replaceAllTiles(assets.tile`clyde`, assets.tile`transparency16`)
 }
-sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
-    if (sprite == Pinky && pinkyScared == 1) {
-        if (changeGhostImagesExperiement == 0) {
-            Pinky = sprites.create(assets.image`pinky`, SpriteKind.Enemy)
-        } else {
-            Pinky = sprites.create(assets.image`royalGuards`, SpriteKind.Enemy)
-        }
-        tiles.placeOnTile(Pinky, tiles.getTileLocation(7, 6))
-        pinkyScared = 0
-        doBehavior(Pinky)
-    }
-    if (sprite == Inky && inkyScared == 1) {
-        if (changeGhostImagesExperiement == 0) {
-            Inky = sprites.create(assets.image`inky`, SpriteKind.Enemy)
-        } else {
-            Inky = sprites.create(assets.image`darthVadar`, SpriteKind.Enemy)
-        }
-        tiles.placeOnTile(Inky, tiles.getTileLocation(7, 7))
-        inkyScared = 0
-        timer.after(inkyWaitTime, function () {
-            doBehavior(Inky)
-        })
-    }
-    if (sprite == Blinky && blinkyScared == 1) {
-        if (changeGhostImagesExperiement == 0) {
-            Blinky = sprites.create(assets.image`blinky`, SpriteKind.Enemy)
-        } else {
-            Blinky = sprites.create(assets.image`bobaFett`, SpriteKind.Enemy)
-        }
-        tiles.placeOnTile(Blinky, tiles.getTileLocation(8, 6))
-        blinkyScared = 0
-        timer.after(blinkyWaitTime, function () {
-            doBehavior(Blinky)
-        })
-    }
-    if (sprite == Clyde && clydeScared == 1) {
-        if (changeGhostImagesExperiement == 0) {
-            Clyde = sprites.create(assets.image`clyde`, SpriteKind.Enemy)
-        } else {
-            Clyde = sprites.create(assets.image`stormTrooper`, SpriteKind.Enemy)
-        }
-        tiles.placeOnTile(Clyde, tiles.getTileLocation(8, 7))
-        clydeScared = 0
-        timer.after(clydeWaitTime, function () {
-            doBehavior(Clyde)
-        })
-    }
-})
-scene.onOverlapTile(SpriteKind.Player, assets.tile`pellet`, function (sprite, location) {
+scene.onOverlapTile(SpriteKind.Player, assets.tile`pellet`, function (sprite5, location2) {
     info.changeScoreBy(pointsForPellets)
-    tiles.setTileAt(location, assets.tile`transparency16`)
+    tiles.setTileAt(location2, assets.tile`transparency16`)
     music.pewPew.play()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    ghostKilledCount += 1
-    if (otherSprite == Pinky && pinkyScared == 0) {
-        enemyKilledMe(sprite)
-    } else if (otherSprite == Pinky) {
-        otherSprite.destroy(effects.fire, 100)
-    } else {
-    	
-    }
-    if (otherSprite == Inky && inkyScared == 0) {
-        enemyKilledMe(sprite)
-    } else if (otherSprite == Inky) {
-        otherSprite.destroy(effects.fire, 100)
-    } else {
-    	
-    }
-    if (otherSprite == Blinky && blinkyScared == 0) {
-        enemyKilledMe(sprite)
-    } else if (otherSprite == Blinky) {
-        otherSprite.destroy(effects.fire, 100)
-    } else {
-    	
-    }
-    if (otherSprite == Clyde && clydeScared == 0) {
-        enemyKilledMe(sprite)
-    } else if (otherSprite == Clyde) {
-        otherSprite.destroy(effects.fire, 100)
-    } else {
-    	
-    }
-    if (ghostKilledCount == 1) {
-        info.changeScoreBy(200)
-    } else if (ghostKilledCount == 2) {
-        info.changeScoreBy(400)
-    } else if (ghostKilledCount == 3) {
-        info.changeScoreBy(800)
-    } else {
-        info.changeScoreBy(1600)
-    }
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite3, otherSprite) {
+    otherSprite.setVelocity(0 - otherSprite.vx, 0 - otherSprite.vy)
 })
 let superFoodSpriteList: tiles.Location[] = []
 let foodSpriteList: tiles.Location[] = []
+let timeTillNormal = 0
 let Clyde: Sprite = null
 let Blinky: Sprite = null
 let Inky: Sprite = null
 let Pinky: Sprite = null
-let timeTillNormal = 0
-let pacman: Sprite = null
 let ghostSpeed = 0
+let pacman: Sprite = null
 let clydeScared = 0
 let blinkyScared = 0
 let inkyScared = 0
 let pinkyScared = 0
-let level = 0
+let level2 = 0
 let bottomLeftCorner: Sprite = null
 let bottomRightCorner: Sprite = null
 let topLeftCorner: Sprite = null
@@ -497,19 +501,35 @@ if (game.ask("Easy Mode")) {
 if (game.ask("Ships, not Villans")) {
     changeGhostImagesExperiement = 0
 }
-buildLevel(level)
+buildLevel(level2)
 game.showLongText("Welcome to Star Wars Pac-Man.  Collect as many dots as you can!!", DialogLayout.Bottom)
 setupPlayer()
 setupEnemies()
 game.onUpdate(function () {
     if (pacman.vx > 0) {
-        pacman.setImage(assets.image`rightFacingFalcon`)
+        if (changeGhostImagesExperiement == 0) {
+            pacman.setImage(assets.image`rightFacingFalcon`)
+        } else {
+            pacman.setImage(assets.image`rightFacingSkywalker`)
+        }
     } else if (pacman.vx < 0) {
-        pacman.setImage(assets.image`leftFacingFalcon`)
+        if (changeGhostImagesExperiement == 0) {
+            pacman.setImage(assets.image`leftFacingFalcon`)
+        } else {
+            pacman.setImage(assets.image`leftFacingSkywalker`)
+        }
     } else if (pacman.vy > 0) {
-        pacman.setImage(assets.image`downFacingFalcon`)
+        if (changeGhostImagesExperiement == 0) {
+            pacman.setImage(assets.image`downFacingFalcon`)
+        } else {
+        	
+        }
     } else if (pacman.vy < 0) {
-        pacman.setImage(assets.image`upFacingFalcon`)
+        if (changeGhostImagesExperiement == 0) {
+            pacman.setImage(assets.image`upFacingFalcon`)
+        } else {
+        	
+        }
     } else {
     	
     }
@@ -528,8 +548,8 @@ game.onUpdateInterval(500, function () {
     foodSpriteList = tiles.getTilesByType(assets.tile`pellet`)
     superFoodSpriteList = tiles.getTilesByType(assets.tile`superPellet`)
     if (foodSpriteList.length == 0 && superFoodSpriteList.length == 0) {
-        level += 1
-        buildLevel(level)
+        level2 += 1
+        buildLevel(level2)
         resetFrightenedToNormal()
         resetEnemies()
     }

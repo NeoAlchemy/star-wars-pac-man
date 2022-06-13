@@ -3,25 +3,6 @@ namespace myImages {
 
     helpers._registerFactory("image", function(name: string) {
         switch(helpers.stringTrim(name)) {
-            case "image26":
-            case "rightFacingFalcon":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . 5 5 5 5 5 5 . . . . . . 
-. . . 5 5 5 5 5 5 5 5 5 5 . . . 
-. . 5 5 5 5 5 5 5 5 5 5 5 5 . . 
-. 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
-. 5 5 5 5 5 5 5 5 5 5 . . . . . 
-. 5 5 5 5 5 5 5 5 5 5 . . . . . 
-. 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
-. 5 5 5 5 5 5 5 5 5 5 5 5 5 . . 
-. 5 5 5 5 5 5 5 5 5 5 5 5 . . . 
-. . 5 5 5 5 5 5 5 5 5 . . . . . 
-. . . 5 5 5 5 5 5 5 5 5 5 . . . 
-. . . . 5 5 5 5 5 5 . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`;
             case "image27":
             case "leftFacingFalcon":return img`
 . . . . . . . . . . . . . . . . 
@@ -467,6 +448,63 @@ ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 95fffff52fffffff5555555555555555555555fffffffff552ffffff55555fffffff52fffffffff955555555555555fffffff52f555555555555555555555555ffffffff52f95555555555fffffff52f
 f55555552fffffff5555555555555555555555555555555552ffffff55555555555552ffffffffff55555555555555555555552f5555555555555555555555555555555552f95555555555555555552f
 ff2222222ffffffff222222222222222222222222222222222fffffff2222222222222ffffffffffff222222222222222222222f2222222222222222222222222222222222f92222222222222222222f
+`;
+            case "image11":
+            case "rightFacingFalcon":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . 5 5 5 5 5 5 . . . . . . 
+. . . 5 5 5 5 5 5 5 5 5 5 . . . 
+. . 5 5 5 5 5 5 5 5 5 5 5 5 . . 
+. 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
+. 5 5 5 5 5 5 5 5 5 5 . . . . . 
+. 5 5 5 5 5 5 5 5 5 5 . . . . . 
+. 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
+. 5 5 5 5 5 5 5 5 5 5 5 5 5 . . 
+. 5 5 5 5 5 5 5 5 5 5 5 5 . . . 
+. . 5 5 5 5 5 5 5 5 5 . . . . . 
+. . . 5 5 5 5 5 5 5 5 5 5 . . . 
+. . . . 5 5 5 5 5 5 . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image26":
+            case "rightFacingSkywalker":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . f f f f . . . . . . . . 
+. . . f 5 5 5 5 f . . . . . . . 
+. . f 5 5 5 5 5 5 f . . . . . . 
+. . f 5 5 5 5 5 5 f . . . . . . 
+. f 5 5 5 5 5 5 5 5 f . . . 7 7 
+. f 5 5 1 d d 1 5 5 f . . 7 7 7 
+. f 5 5 8 d d 8 5 5 f . 7 7 7 . 
+. f c 5 d d d d 5 c f 7 7 7 . . 
+. . f c c c c c c f 7 7 7 . . . 
+. f c c c c c c c c f 7 . . . . 
+f d c c e b b e c f f . . . . . 
+f d d c c c c c c c . . . . . . 
+. f f c c c c c c f f . . . . . 
+. f c c c f f c c c f . . . . . 
+`;
+            case "image12":
+            case "leftFacingSkywalker":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . f f f f . . . . 
+. . . . . . . f 5 5 5 5 f . . . 
+. . . . . . f 5 5 5 5 5 5 f . . 
+. . . . . . f 5 5 5 5 5 5 f . . 
+7 7 . . . f 5 5 5 5 5 5 5 5 f . 
+7 7 7 . . f 5 5 1 d d 1 5 5 f . 
+. 7 7 7 . f 5 5 8 d d 8 5 5 f . 
+. . 7 7 7 f c 5 d d d d 5 c f . 
+. . . 7 7 7 f c c c c c c f . . 
+. . . . 7 f c c c c c c c c f . 
+. . . . . f f c e b b e c c d f 
+. . . . . . c c c c c c c d d f 
+. . . . . f f c c c c c c f f . 
+. . . . . f c c c f f c c c f . 
 `;
         }
         return null;
